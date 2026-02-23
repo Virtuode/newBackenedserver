@@ -5,4 +5,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/product", productRoutes);
+app.get("/", (req, res) => {
+    res.send("Backend is running");
+});
 export default app;
