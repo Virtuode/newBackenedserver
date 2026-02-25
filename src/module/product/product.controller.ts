@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import prisma from "../../Utils/prisma.js";
-import { error } from "node:console";
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
@@ -35,5 +34,23 @@ export const getAllProduct = async (req: Request, res: Response) => {
   } catch (error) {
     console.log("Error fetching data...", error);
     res.status(500).json(error);
+  }
+};
+
+export const getProductById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const getProductByID = await prisma.product.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!getProductByID) {
+      return res.status(404).json({ message: "Product Not Found" });
+    }
+
+    res.status(200).json(getProductByID);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internel server error  " });
   }
 };
